@@ -74,19 +74,26 @@ int main(int argc, char **argv){
   	//bzero(sdbuf, 1024);
 
 
-    int f_block_sz;
+    int f_block_sz = 0;
     int total_sent = 0;
     int pack_num = 0;
     struct numbered_packet *to_send;
-
+		int n;
 		//We need to alocate memory, getting segfault
-		printf("this is Test %i\n",f_block_sz);
-    while((f_block_sz = fread(to_send->data, sizeof(fp), 1024, fp)) > 0)
+		printf("this is f_block_sz %i\n",f_block_sz);
+		fseek(fp,0,SEEK_END);
+		size_t file_size=ftell(fp);
+		fseek(fp,0,SEEK_SET);
+		printf("file_size = %i\n", file_size);
+    while((f_block_sz = fread(to_send->data, file_size, 1024, fp)) > 0)
     {
-			printf("f_block_sz = %c\n", f_block_sz);
 
+				printf("f_block_sz = %i\n", f_block_sz);
+				printf("cliaddr = %i\n",cliaddr);
         to_send->num = pack_num;
-        if (sendto(sockfd,to_send,f_block_sz,0,(struct sockaddr*)&cliaddr,sizeof(cliaddr)) < 0)
+
+				n = sendto(sockfd,to_send,1024,0,(struct sockaddr*)&cliaddr,sizeof(cliaddr));
+				if (n < 0)
         {
             printf("ERROR: Failed to send file %s.\n", fileName);
         }
@@ -100,7 +107,7 @@ int main(int argc, char **argv){
 				pack_num++;
 				printf("Number of packets sent %i\n",pack_num);
 
-        }
+    	}
         printf ("Sent %d total.\n", total_sent);
     }
     close(sockfd);
