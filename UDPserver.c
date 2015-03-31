@@ -63,7 +63,7 @@ int main(int argc, char **argv){
 
 		char *fileName = strtok(line, "\n");
 
-		FILE * fp = fopen(fileName, "r");
+		FILE *fp = fopen(fileName, "r");
 
 		char sdbuf[1024];
 		if(fp == NULL)
@@ -80,9 +80,10 @@ int main(int argc, char **argv){
     struct numbered_packet *to_send;
 
 		//We need to alocate memory, getting segfault
-
-    while((f_block_sz = fread(to_send->data, sizeof(char), 1024, fp)) > 0)
+		printf("this is Test %i\n",f_block_sz);
+    while((f_block_sz = fread(to_send->data, sizeof(fp), 1024, fp)) > 0)
     {
+			printf("f_block_sz = %c\n", f_block_sz);
 
         to_send->num = pack_num;
         if (sendto(sockfd,to_send,f_block_sz,0,(struct sockaddr*)&cliaddr,sizeof(cliaddr)) < 0)
@@ -93,13 +94,14 @@ int main(int argc, char **argv){
 				{
             printf ("Sent %d bytes \n", f_block_sz);
 						total_sent += f_block_sz;
-			   	  bzero(sdbuf, 1024);
+			   	  (sdbuf, 1024);
 				}
 
 				pack_num++;
+				printf("Number of packets sent %i\n",pack_num);
 
         }
-        printf ("Sent %d total", total_sent);
+        printf ("Sent %d total.\n", total_sent);
     }
     close(sockfd);
     return 0;

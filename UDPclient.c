@@ -63,9 +63,17 @@ int main(int argc, char **argv){
 			int total_bytes = 0;
 			int len = sizeof(serveraddr);
 			struct numbered_packet *pack;
-
-			while(bytesReceived = recvfrom(sockfd,pack,1024,0,(struct sockaddr*)&serveraddr,&len) >= 0)
+			printf("Recieve that stuff!\n");
+			int n = 0;
+			int len = sizeof(serveraddr);
+			while((recvfrom(sockfd,pack->data,1024,0,(struct sockaddr*)&serveraddr,&len);) >= 0)
 			{
+
+  			if(n<0)
+				{
+    			printf("Sorry, I had a problem receiving\n");
+    			return 1;
+  			}
 				printf("Bytes received %d\n",bytesReceived);
 				total_bytes += bytesReceived;
 				fwrite(pack->data, 1,bytesReceived,fp);
